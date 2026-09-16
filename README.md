@@ -48,8 +48,8 @@ dotnet sln GeradorCertificadosOnline.slnx list
 
 ## Participantes
 
-- **Pedro:** Usuários e Autenticação; Geração de Certificados.
-- **Marco:** Cursos.
+- **Pedro:** 
+- **Marco:** 
 
 Contratos compartilhados devem ser combinados antes da implementação para
 evitar divergências de identificadores, estados e respostas HTTP.
