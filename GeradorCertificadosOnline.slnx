@@ -13,9 +13,6 @@
     <Project Path="src/Infraestrutura/GeradorCertificadosOnline.Infraestrutura.csproj" />
   </Folder>
   <Folder Name="/tests/" />
-  <Folder Name="/tests/ApplicationTests/">
-    <Project Path="tests/ApplicationTests/GeradorCertificadosOnline.ApplicationTests.csproj" />
-  </Folder>
   <Folder Name="/tests/E2ETests/">
     <Project Path="tests/E2ETests/GeradorCertificadosOnline.E2ETests.csproj" />
   </Folder>
