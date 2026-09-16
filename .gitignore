@@ -180,9 +180,6 @@ coverage*.info
 *.coverage
 *.coveragexml
 
-# Project documentation
-/docs/
-
 # NCrunch
 _NCrunch_*
 .NCrunch_*
