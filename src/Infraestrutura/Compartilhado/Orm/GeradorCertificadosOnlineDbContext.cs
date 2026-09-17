@@ -7,7 +7,7 @@ using GeradorCertificadosOnline.Infraestrutura.Compartilhado.Orm.Config;
 
 namespace GeradorCertificadosOnline.Infraestrutura.Compartilhado.Orm;
 
-public sealed class GeradorCertificadosOnlineDbContext(
+public class GeradorCertificadosOnlineDbContext(
     DbContextOptions<GeradorCertificadosOnlineDbContext> options,
     IProvedorDeUsuario? provedorDeUsuario = null
 ) : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(options)
@@ -67,7 +67,12 @@ public sealed class GeradorCertificadosOnlineDbContext(
 
     private void AplicarRegrasDePropriedade()
     {
-        if (provedorDeUsuario?.Id is not Guid usuarioAtualId)
+        if (provedorDeUsuario is null)
+        {
+            return;
+        }
+
+        if (provedorDeUsuario.Id is not Guid usuarioAtualId)
         {
             throw new UnauthorizedAccessException(
                 "Não é possível salvar entidades do usuário sem estar autenticado."
