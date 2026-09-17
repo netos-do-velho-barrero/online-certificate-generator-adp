@@ -326,22 +326,13 @@ Não retornar stack trace, caminhos físicos, senha, hash ou token em respostas.
 Validar regras isoladas: senha, email, limites de curso e aluno, estados,
 lote vazio e bloqueio de solicitação concorrente.
 
-### ApplicationTests
-
-Validar Commands, Queries e Handlers: cadastro, login, curso, criação do
-processamento, publicação, status e erros de negócio.
-
 ### IntegrationTests
 
 Validar persistência, constraints, migrations, mensageria e armazenamento.
 
-### E2ETests
-
-Executar o fluxo HTTP completo: cadastro, login, curso, solicitação, status,
-listagem e download do ZIP.
-
-Todos os testes devem verificar status HTTP, contratos, autenticação e efeitos
-persistidos.
+Os testes de unidade cobrem regras de domínio. Os testes de integração cobrem
+persistência, autenticação, contratos HTTP e efeitos persistidos quando o fluxo
+exigir infraestrutura.
 
 ## 12. Divisão de trabalho
 
@@ -484,7 +475,7 @@ Uma entrega está pronta quando:
 6. configurar MassTransit e RabbitMQ;
 7. implementar PDFs;
 8. implementar ZIP e download;
-9. adicionar testes por camada e E2E;
+9. adicionar testes unitários de domínio e testes de integração;
 10. configurar pipeline, board e publicação.
 
 ## 17. Development branches

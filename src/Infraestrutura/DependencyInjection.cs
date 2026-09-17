@@ -1,6 +1,8 @@
 using GeradorCertificadosOnline.Dominio.Compartilhado.Auth;
+using GeradorCertificadosOnline.Dominio.Modulos.Usuarios;
 using GeradorCertificadosOnline.Infraestrutura.Compartilhado.Auth;
 using GeradorCertificadosOnline.Infraestrutura.Compartilhado.Orm;
+using GeradorCertificadosOnline.Infraestrutura.Modulos.Usuarios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +40,8 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<GeradorCertificadosOnlineDbContext>();
 
         services.AddScoped<IGerenciadorDeIdentidade, GerenciadorDeIdentidade>();
-        services.AddScoped(typeof(RepositorioBaseEmOrm<>));
+        services.AddScoped<IRepositorioUsuario, RepositorioUsuarioEmOrm>();
+        services.AddScoped<IRepositorioPerfilUsuario, RepositorioPerfilUsuarioEmOrm>();
 
         return services;
     }

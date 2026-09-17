@@ -1,4 +1,5 @@
 using GeradorCertificadosOnline.Dominio.Compartilhado.Auth;
+using GeradorCertificadosOnline.Dominio.Modulos.Usuarios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,20 +13,16 @@ public class GeradorCertificadosOnlineDbContext(
     IProvedorDeUsuario? provedorDeUsuario = null
 ) : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(options)
 {
+    private Guid UsuarioAtualId => provedorDeUsuario?.Id ?? Guid.Empty;
+    private bool PossuiUsuarioAtual => provedorDeUsuario is not null;
+
     private static readonly Guid TipoUsuarioClienteId =
         new("01a058f4-a048-79a3-b1a6-0f01d629a126");
     private static readonly Guid TipoUsuarioEstabelecimentoId =
         new("01a06851-5e71-7ae2-822d-21e2fadcffa4");
 
-    // Ainda não implementado no Domínio:
-    // - Usuario e PerfilUsuario: cadastro e dados complementares do usuário.
-    // - Categoria e Curso: organização dos cursos.
-    // - ItemCurso: aulas/conteúdos de um curso.
-    // - Certificado e ItemCertificado: certificado emitido e seus conteúdos.
-    // - ItemCursoItemCertificado: tabela de associação entre curso e certificado.
-    //
-    // Quando as classes forem implementadas, adicionar os DbSets, por exemplo:
-    // public DbSet<Curso> Cursos => Set<Curso>();
+    public DbSet<Usuario> UsuariosDominio => Set<Usuario>();
+    public DbSet<PerfilUsuario> PerfisUsuarios => Set<PerfilUsuario>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,6 +46,12 @@ public class GeradorCertificadosOnlineDbContext(
                 ConcurrencyStamp = "01a06852-c767-7d97-84e4-6b5f0775f3e5"
             }
         );
+
+        // Isola leituras por usuário autenticado. Contextos técnicos sem provedor
+        // continuam disponíveis para migrations e tarefas administrativas.
+        modelBuilder.Entity<PerfilUsuario>().HasQueryFilter(perfil =>
+            !PossuiUsuarioAtual || perfil.UsuarioId == UsuarioAtualId
+        );
     }
 
     public override int SaveChanges()
@@ -67,7 +70,7 @@ public class GeradorCertificadosOnlineDbContext(
 
     private void AplicarRegrasDePropriedade()
     {
-        if (provedorDeUsuario is null)
+        if (provedorDeUsuario is null || !provedorDeUsuario.EstaAutenticado)
         {
             return;
         }

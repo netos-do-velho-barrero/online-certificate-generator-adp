@@ -25,5 +25,6 @@ public interface IGerenciadorDeIdentidade
         string senha,
         TipoUsuario tipo
     );
+    string CriarHashDeSenha(Guid usuarioId, string senha);
     Task ExcluirAsync(Guid usuarioId);
 }

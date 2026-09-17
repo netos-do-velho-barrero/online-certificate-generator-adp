@@ -86,6 +86,12 @@ public sealed class GerenciadorDeIdentidade(
         return new UsuarioDto(usuario.Id, usuario.Email!);
     }
 
+    public string CriarHashDeSenha(Guid usuarioId, string senha)
+    {
+        IdentityUser<Guid> usuario = new() { Id = usuarioId };
+        return gerenciadorDeUsuarios.PasswordHasher.HashPassword(usuario, senha);
+    }
+
     public async Task ExcluirAsync(Guid usuarioId)
     {
         IdentityUser<Guid>? usuario = await gerenciadorDeUsuarios.FindByIdAsync(
