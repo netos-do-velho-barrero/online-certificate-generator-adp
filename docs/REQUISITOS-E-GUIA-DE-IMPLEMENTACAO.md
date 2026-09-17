@@ -374,6 +374,38 @@ Registrar em issue ou decisão técnica:
 - concorrência por curso;
 - armazenamento lógico de arquivos.
 
+### Contrato compartilhado proposto
+
+Esta é a proposta inicial para revisão de Pedro e Marco:
+
+- **Identificadores:** `Guid`, serializado como texto em JSON.
+- **JSON:** propriedades em `camelCase`, como `cursoId`, `cargaHoraria` e
+  `dataConclusao`.
+- **Datas:** ISO 8601; datas de negócio como `yyyy-MM-dd` e timestamps como
+  UTC, por exemplo `2026-09-16T20:00:00Z`.
+- **Erros:** `ProblemDetails`, com `400` para validação, `401` para
+  autenticação, `404` para recurso inexistente e `409` para conflito.
+- **Curso:** o contrato mínimo para Certificados contém `id`, `nome`,
+  `cargaHoraria` e `dataConclusao`.
+- **Curso inexistente:** a solicitação de certificados retorna `404 Not Found`.
+- **Concorrência:** apenas um processamento não finalizado por curso; uma nova
+  solicitação retorna `409 Conflict`.
+- **Falha parcial:** qualquer falha na geração impede `Concluído`; o
+  processamento fica como `Falha` e os resultados individuais permanecem
+  consultáveis.
+- **Download:** o ZIP só pode ser baixado quando o processamento estiver
+  `Concluído`; antes disso retorna `409 Conflict`.
+- **Estados gerais:** `Pendente`, `GerandoCertificados`, `GerandoZip`,
+  `Concluido` e `Falha`.
+- **Estados individuais:** `Pendente`, `Gerando`, `Gerado` e `Falha`.
+- **Mensageria:** a mensagem carrega `processamentoId` e `cursoId`; os PDFs e
+  o ZIP não são transportados pela fila.
+- **Arquivos:** a API expõe download por identificador, nunca caminho físico.
+
+Pedro e Marco devem revisar esta seção antes de criar os contratos definitivos.
+Se houver alteração, atualizar este documento e a issue de contratos antes do
+desenvolvimento paralelo.
+
 ## 13. Issues, commits e Project Board
 
 Criar issues pequenas, com objetivo, dependências, critérios de aceite, casos
