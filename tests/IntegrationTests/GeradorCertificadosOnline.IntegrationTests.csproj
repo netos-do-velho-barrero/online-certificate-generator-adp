@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Infraestrutura\GeradorCertificadosOnline.Infraestrutura.csproj" />
+    <ProjectReference Include="..\..\src\Api\GeradorCertificadosOnline.WebApi.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.9.3" />
     <PackageReference Include="MSTest.TestFramework" Version="3.9.3" />

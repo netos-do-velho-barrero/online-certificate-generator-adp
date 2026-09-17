@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using GeradorCertificadosOnline.Infraestrutura.Compartilhado.Orm.Config;
 
 namespace GeradorCertificadosOnline.Infraestrutura.Compartilhado.Orm;
 
@@ -29,6 +30,7 @@ public sealed class GeradorCertificadosOnlineDbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        ConfiguracaoOrmGeral.Aplicar(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GeradorCertificadosOnlineDbContext).Assembly);
 
         modelBuilder.Entity<IdentityRole<Guid>>().HasData(
