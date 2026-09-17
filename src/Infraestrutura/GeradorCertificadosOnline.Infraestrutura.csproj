@@ -9,4 +9,21 @@
     <ProjectReference Include="..\Aplicacao\GeradorCertificadosOnline.Aplicacao.csproj" />
     <ProjectReference Include="..\Dominio\GeradorCertificadosOnline.Dominio.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- ORM principal e suporte a DbContext, DbSet, migrations e configurações. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+
+    <!-- Integração do ASP.NET Core Identity com o Entity Framework Core. -->
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+
+    <!-- Provedor do Entity Framework Core para PostgreSQL. -->
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+
+    <!-- Necessário para criar e atualizar migrations via dotnet ef. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
