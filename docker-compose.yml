@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: gerador-certificados-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: gerador_certificados
+    ports:
+      - "5432:5432"
+    volumes:
+      - gerador-certificados-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gerador_certificados"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: gerador-certificados-rabbitmq
+    restart: unless-stopped
+    profiles: ["messaging"]
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - gerador-certificados-rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  gerador-certificados-postgres-data:
+  gerador-certificados-rabbitmq-data:

@@ -16,9 +16,9 @@ public static class DependencyInjection
     )
     {
         string connectionString =
-            configuration.GetConnectionString("Default")
+            configuration.GetConnectionString("PostgresEF")
             ?? throw new InvalidOperationException(
-                "A connection string 'Default' não foi configurada."
+                "A connection string 'PostgresEF' não foi configurada."
             );
 
         services.AddDbContext<GeradorCertificadosOnlineDbContext>(options =>

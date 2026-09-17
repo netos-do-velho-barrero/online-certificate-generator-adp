@@ -25,17 +25,75 @@ src/
 
 tests/
 ├── UnitTests/
-├── IntegrationTests/
-├── ApplicationTests/
-└── E2ETests/
+└── IntegrationTests/
 ```
 
 ## Pré-requisitos
 
 - .NET SDK 10;
-- banco de dados configurado no ambiente;
-- RabbitMQ/CloudAMQP para processamento assíncrono;
+- Docker Desktop;
 - secrets configurados fora do código-fonte.
+
+## Ambiente local, desde a instalação
+
+1. Instale o [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+   e o [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Clone o repositório e entre na pasta do projeto.
+3. Confirme as ferramentas:
+
+   ```powershell
+   dotnet --info
+   docker --version
+   docker compose version
+   ```
+
+4. Inicie o PostgreSQL:
+
+   ```powershell
+   docker compose up -d postgres
+   ```
+
+   O banco estará em `localhost:5432`, com banco
+   `gerador_certificados`, usuário `postgres` e senha local padrão `postgres`.
+   Cada desenvolvedor terá seu próprio volume e seus próprios dados.
+
+5. Configure o User Secret da API:
+
+   ```powershell
+   dotnet user-secrets init --project .\src\Api
+   dotnet user-secrets set "ConnectionStrings:PostgresEF" `
+     "Host=localhost;Port=5432;Database=gerador_certificados;Username=postgres;Password=postgres" `
+     --project .\src\Api
+   ```
+
+6. Valide a base:
+
+   ```powershell
+   dotnet restore .\GeradorCertificadosOnline.slnx
+   dotnet build .\GeradorCertificadosOnline.slnx
+   dotnet test .\tests\UnitTests\GeradorCertificadosOnline.UnitTests.csproj
+   dotnet test .\tests\IntegrationTests\GeradorCertificadosOnline.IntegrationTests.csproj
+   ```
+
+7. O RabbitMQ ainda é opcional. Para iniciá-lo quando o processamento
+   assíncrono for implementado:
+
+   ```powershell
+   docker compose --profile messaging up -d rabbitmq
+   ```
+
+   O painel ficará em `http://localhost:15672`, com `guest/guest`.
+
+### Comandos úteis
+
+```powershell
+docker compose ps
+docker compose logs postgres
+docker compose stop
+docker compose down
+```
+
+Não use `docker compose down -v` sem querer apagar os dados locais.
 
 ## Validar a solução
 

@@ -5,10 +5,16 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using GeradorCertificadosOnline.Dominio.Compartilhado.Auth;
 using FluentValidation;
+using GeradorCertificadosOnline.Api.Compartilhado.Auth;
+using GeradorCertificadosOnline.Api.Compartilhado.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<NewRelicOptions>(
+    builder.Configuration.GetSection("NewRelic")
+);
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 builder.Services.AddCors(options =>
