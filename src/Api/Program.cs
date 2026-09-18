@@ -7,6 +7,7 @@ using GeradorCertificadosOnline.Dominio.Compartilhado.Auth;
 using FluentValidation;
 using GeradorCertificadosOnline.Api.Compartilhado.Auth;
 using Microsoft.OpenApi.Models;
+using GeradorCertificadosOnline.Dominio.Compartilhado;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,9 @@ app.UseExceptionHandler(exceptionApp =>
             ValidationException => StatusCodes.Status400BadRequest,
             ValidacaoDeIdentidadeException => StatusCodes.Status400BadRequest,
             ConflitoDeIdentidadeException => StatusCodes.Status409Conflict,
+            ConflitoDeRegraDeNegocioException => StatusCodes.Status409Conflict,
+            ConflitoDePersistenciaException => StatusCodes.Status409Conflict,
+            InvalidOperationException => StatusCodes.Status409Conflict,
             KeyNotFoundException => StatusCodes.Status404NotFound,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             _ => StatusCodes.Status500InternalServerError
