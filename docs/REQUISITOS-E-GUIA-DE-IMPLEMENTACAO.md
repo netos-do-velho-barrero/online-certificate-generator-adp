@@ -231,12 +231,19 @@ O download só ocorre com ZIP pronto. Antes disso, usar `409 Conflict` ou
 
 ## 7. Processamento assíncrono
 
-Usar MassTransit com RabbitMQ/CloudAMQP. A mensagem deve transportar
-identificadores e dados pequenos, nunca arquivos grandes.
+Quando um broker externo estiver disponível, usar MassTransit com
+RabbitMQ/CloudAMQP. No ambiente atual, o requisito de processamento
+assíncrono é atendido por uma fila interna baseada em `Channel<Guid>` e um
+`BackgroundService`, sem exigir infraestrutura externa para executar a
+aplicação. A mensagem interna transporta somente o `processamentoId`; o curso
+é carregado pelo identificador persistido. Arquivos grandes nunca passam pela
+fila.
 
 O consumidor precisa ser idempotente: reprocessar a mesma mensagem não pode
-duplicar certificados nem corromper status. Usar identificador do processamento,
-restrições de unicidade e operações transacionais.
+duplicar certificados nem corromper status. O consumidor atual verifica se o
+processamento já foi finalizado, ignora certificados já gerados e usa o
+identificador persistido do processamento. A restrição única por curso/usuário
+impede lotes concorrentes não finalizados.
 
 Configurar retry para falhas transitórias, limite de tentativas, fila de erro,
 logs com `processamentoId` e `certificadoId` e atualização de status em cada
@@ -472,7 +479,8 @@ Uma entrega está pronta quando:
 3. implementar cadastro e login;
 4. proteger rotas com JWT;
 5. implementar solicitação e consulta de processamento;
-6. configurar MassTransit e RabbitMQ;
+6. configurar a fila interna; substituir por MassTransit/RabbitMQ somente se o
+   ambiente publicado exigir durabilidade e processamento distribuído;
 7. implementar PDFs;
 8. implementar ZIP e download;
 9. adicionar testes unitários de domínio e testes de integração;

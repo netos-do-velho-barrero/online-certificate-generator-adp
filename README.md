@@ -75,8 +75,10 @@ tests/
    dotnet test .\tests\IntegrationTests\GeradorCertificadosOnline.IntegrationTests.csproj
    ```
 
-7. O RabbitMQ ainda é opcional. Para iniciá-lo quando o processamento
-   assíncrono for implementado:
+7. O processamento assíncrono local já está implementado com
+   `BackgroundService` + `Channel<Guid>` e não depende do RabbitMQ. O RabbitMQ
+   permanece disponível apenas como infraestrutura opcional para uma evolução
+   futura com broker externo:
 
    ```powershell
    docker compose --profile messaging up -d rabbitmq
