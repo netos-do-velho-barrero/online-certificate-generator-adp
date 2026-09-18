@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using GeradorCertificadosOnline.Dominio.Modulos.Certificados;
+using GeradorCertificadosOnline.Infraestrutura.Modulos.Certificados;
 
 namespace GeradorCertificadosOnline.Infraestrutura;
 
@@ -45,6 +48,20 @@ public static class DependencyInjection
         services.AddScoped<IRepositorioUsuario, RepositorioUsuarioEmOrm>();
         services.AddScoped<IRepositorioPerfilUsuario, RepositorioPerfilUsuarioEmOrm>();
         services.AddScoped<IRepositorioCurso, RepositorioCursoEmOrm>();
+        services.AddScoped<IRepositorioProcessamento, RepositorioProcessamentoEmOrm>();
+        services.AddScoped<IProcessadorCertificados, ProcessadorCertificados>();
+        services.AddSingleton(new ArmazenamentoArquivosOptions
+        {
+            RootPath = configuration["Storage:RootPath"] ?? "storage"
+        });
+        services.AddSingleton<ArmazenamentoArquivosLocal>();
+        services.AddSingleton<IArmazenamentoArquivos>(sp =>
+            sp.GetRequiredService<ArmazenamentoArquivosLocal>());
+        services.AddSingleton<IGeradorPdfCertificado, GeradorPdfCertificado>();
+        services.AddSingleton<IGeradorZip, GeradorZip>();
+        services.AddSingleton<FilaCertificados>();
+        services.AddSingleton<IFilaCertificados>(sp => sp.GetRequiredService<FilaCertificados>());
+        services.AddHostedService<ProcessadorCertificadosBackgroundService>();
 
         return services;
     }
