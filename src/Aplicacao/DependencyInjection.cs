@@ -2,6 +2,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using GeradorCertificadosOnline.Aplicacao.Compartilhado;
+using GeradorCertificadosOnline.Aplicacao.Compartilhado.Contratos.Cursos;
+using GeradorCertificadosOnline.Aplicacao.Modulos.Cursos;
 
 namespace GeradorCertificadosOnline.Aplicacao;
 
@@ -16,6 +18,7 @@ public static class DependencyInjection
         }
         );
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        services.AddScoped<IConsultaCurso, ConsultaCurso>();
 
         return services;
     }
