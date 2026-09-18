@@ -1,4 +1,5 @@
 using GeradorCertificadosOnline.Dominio.Compartilhado.Auth;
+using GeradorCertificadosOnline.Dominio.Modulos.Cursos;
 using GeradorCertificadosOnline.Dominio.Modulos.Usuarios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -23,6 +24,7 @@ public class GeradorCertificadosOnlineDbContext(
 
     public DbSet<Usuario> UsuariosDominio => Set<Usuario>();
     public DbSet<PerfilUsuario> PerfisUsuarios => Set<PerfilUsuario>();
+    public DbSet<Curso> Cursos => Set<Curso>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
